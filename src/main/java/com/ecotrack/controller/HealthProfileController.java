@@ -1,28 +1,36 @@
 package com.ecotrack.controller;
 
 import com.ecotrack.model.HealthProfile;
+import com.ecotrack.model.User;
 import com.ecotrack.repository.HealthProfileRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ecotrack.repository.UserRepository;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/profile")
 public class HealthProfileController {
 
-    public HealthProfileController() {
-        System.out.println("HealthProfileController initialized");
+    private final HealthProfileRepository healthProfileRepository;
+    private final UserRepository userRepository;
+
+    public HealthProfileController(HealthProfileRepository healthProfileRepository,
+                                   UserRepository userRepository) {
+        this.healthProfileRepository = healthProfileRepository;
+        this.userRepository = userRepository;
     }
 
-    @Autowired
-    private HealthProfileRepository repository;
-
     @PostMapping
-    public HealthProfile saveProfile(@RequestBody HealthProfile profile) {
-        return repository.save(profile);
+    public HealthProfile saveProfile(@RequestBody HealthProfile profile, Authentication authentication) {
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email).orElseThrow();
+        profile.setUserEmail(user.getEmail());
+        return healthProfileRepository.save(profile);
     }
 
     @GetMapping
-    public HealthProfile getProfile(@RequestParam String email) {
-        return repository.findByUserEmail(email);
+    public HealthProfile getProfile(Authentication authentication) {
+        String email = authentication.getName();
+        return healthProfileRepository.findByUserEmail(email);
     }
 }
