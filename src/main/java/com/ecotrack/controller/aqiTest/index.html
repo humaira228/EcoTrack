@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ORS Route Example</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body>
+  <h3>Route from Dhaka University to SUST</h3>
+  <div id="map" style="height: 500px;"></div>
+
+  <script>
+    // Initialize the map
+    var map = L.map('map').setView([24.0, 90.5], 7); // Center Bangladesh
+
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // ORS API Key
+    const apiKey = "YOUR_API_KEY_HERE";
+
+    // Coordinates: [lon, lat]
+    const start = [90.399452, 23.733774]; // Dhaka University
+    const end   = [91.822350, 24.917795]; // SUST, Sylhet
+
+    // Fetch route from ORS
+    fetch(`https://api.openrouteservice.org/v2/directions/driving-car?api_key=${apiKey}&start=${start[0]},${start[1]}&end=${end[0]},${end[1]}`)
+      .then(response => response.json())
+      .then(data => {
+        // Get geometry of the route
+        const coords = data.features[0].geometry.coordinates;
+
+        // Convert [lon, lat] -> [lat, lon] for Leaflet
+        const latlngs = coords.map(c => [c[1], c[0]]);
+
+        // Draw the route line on map
+        L.polyline(latlngs, {color: 'blue'}).addTo(map);
+
+        // Add start and end markers
+        L.marker([start[1], start[0]]).addTo(map).bindPopup("Dhaka University");
+        L.marker([end[1], end[0]]).addTo(map).bindPopup("SUST, Sylhet");
+
+        // Fit map to route
+        map.fitBounds(L.polyline(latlngs).getBounds());
+      });
+  </script>
+</body>
+</html>
