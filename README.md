@@ -6,8 +6,7 @@ https://radiant-lily-55c610.netlify.app/
 
 A full-stack web application that provides personalized, health-focused route recommendations. It combines real-time air quality data, user health profiles, and machine learning to calculate a **Health Safety Score** for navigation alternatives, helping users avoid pollution and disease hotspots.
 
-> **🏆 Therap JavaFest Submission:** This project demonstrates mastery of Java/Spring Boot for the backend, React for the frontend, and Python for AI/ML services.
-
+> **For Therap JavaFest:** 
 ---
 
 ## ✨ Features
