@@ -1,7 +1,4 @@
 https://radiant-lily-55c610.netlify.app/
-Of course. Here is a comprehensive, professional `README.md` file that integrates your Java Spring Boot backend, React frontend, and Python ML service into a single, cohesive project description.
-
----
 
 # RouteAI – EcoTrack 🌿
 
